@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns="http://java.sun.com/xml/ns/javaee" 
+		xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+		xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:cfg/applicationContext.xml</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	 <welcome-file-list>
+	   <welcome-file>welcome.html</welcome-file>
+	 </welcome-file-list>
+	 <error-page>
+	   <error-code>404</error-code>
+	   <location>/common/html/404.html</location>
+	 </error-page>
+	  <error-page>
+	   <error-code>401</error-code>
+	   <location>/common/html/401.html</location>
+	 </error-page>
+	 <session-config>
+	   <session-timeout>60</session-timeout>
+	 </session-config>
+	 <error-page>
+	   <exception-type>java.lang.Exception</exception-type>
+	   <location>/common/html/error.html</location>
+	 </error-page>
+	 
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:cfg/applicationContext-mvc.xml</param-value>
+		</init-param>
+        <load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- url静态化，前台请求以.html后缀访问；保持url结构一致 -->
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+  
+  	<!-- 验证码 -->
+	<servlet>
+		<servlet-name>ValidCode</servlet-name>
+		<servlet-class>com.webserver.common.VerifyCodeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ValidCode</servlet-name>
+		<url-pattern>/valid_code</url-pattern>
+	</servlet-mapping>
+  	
+  	
+  	<servlet>
+        <servlet-name>ssi</servlet-name>
+        <servlet-class>
+          org.apache.catalina.ssi.SSIServlet
+        </servlet-class>
+        <init-param>
+          <param-name>buffered</param-name>
+          <param-value>1</param-value>
+        </init-param>
+        <init-param>
+          <param-name>debug</param-name>
+          <param-value>0</param-value>
+        </init-param>
+        <init-param>
+          <param-name>expires</param-name>
+          <param-value>666</param-value>
+        </init-param>
+        <init-param>
+          <param-name>isVirtualWebappRelative</param-name>
+          <param-value>0</param-value>
+        </init-param>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+	<servlet-name>ssi</servlet-name>
+		<url-pattern>*.shtml</url-pattern>
+		<url-pattern>*.inc</url-pattern>
+    </servlet-mapping>
+</web-app>
